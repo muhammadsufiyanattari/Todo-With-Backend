@@ -8,47 +8,67 @@ const App = () => {
   const getTodo = async () => {
     try {
       const res = await axios(`${base_url}/getTodos`);
-      let todoData = res?.data.data ;
+      let todoData = res?.data?.data.map(todo => ({
+        ...todo,
+        todoContent: todo.todoContent || "No Content"
+      }));
 
-      console.log(todoData);
+      console.log("todoData",todoData);
+      setTodos(todoData);
     } catch (error) {
       console.log(error);
-      setTodos(todoData);
     }
   };
   useEffect(() => {
     getTodo();
   }, []);
-  const inpvalue = (e) => {
-    try {
-      e.preventDefault();
-      let todo = e.target[0].value;
-      console.log(todo);
-      setInptodo(todo);
-      todo = e.target[0].value = "";
-    } catch (error) {}
-  };
-  useEffect(() => {
-    inpvalue();
-  }, []);
+  // const inpvalue = (e) => {
+  //   try {
+     
+  //     let todo = e.target[0].value;
+  //     console.log(todo);
+  //     setInptodo(todo);
+  //     todo = e.target[0].value = "";
+  //   } catch (error) {}
+  // };
+  // useEffect(() => {
+  //   inpvalue();
+  // }, []);
+
+  const addTodo = async (event) => {
+    try {  
+        event.preventDefault();
+
+      let inpValue = event.target[0].value;
+      const res = await axios.post(`${base_url}/addTodo`,
+        {
+          "todo": inpValue
+      });
+      console.log(res);
+      getTodo();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
       <div className="App flex flex-col items-center justify-center h-screen bg-gray-100">
         <h1>Todo App</h1>
-        <form onSubmit={inpvalue} className="w-1/2">
+        <form onSubmit={addTodo} className="w-1/2 overflow-scroll">
           <input
             type="text"
             className="w-full border border-gray-300 p-2 rounded"
           />
-          <button className="w-full bg-blue-500 text-white p-2 rounded mt-2">
+          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded mt-2">
             Add Todo
           </button>
           <div className="bg-amber-700  text-black">
+            {!todos?.length  && <div>No Todos</div>}
             {todos?.map((value, index) => {
               return (
                 <div
-                  key={index}
+                  key={value.id}
                   className="flex justify-between items-center p-2 border border-gray-300 mt-2"
                 >
                   <div>{value.todoContent}</div>
