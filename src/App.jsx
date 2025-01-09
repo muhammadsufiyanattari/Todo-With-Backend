@@ -74,22 +74,17 @@ console.log("data", data);
   }
   return (
     <>
-      <nav className="bg-gradient-to-r from-blue-500 to-purple-600 w-full p-4 shadow-lg">
+      <div className="bg-gray-900 w-full p-4 shadow-lg">
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-white font-bold text-2xl">Todo App</div>
-          <div className="flex space-x-4">
-            <a href="#" className="text-white hover:text-gray-300">Home</a>
-            <a href="#" className="text-white hover:text-gray-300">About</a>
-            <a href="#" className="text-white hover:text-gray-300">Contact</a>
-          </div>
         </div>
-      </nav>
-      <div className="App flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 py-10">
+      </div>
+      <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-800 py-10">
         <h1 className="font-extrabold text-5xl py-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">Todo App</h1>
-        <form onSubmit={addTodo} className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <form onSubmit={addTodo} className="w-full max-w-md bg-gray-700 p-8 rounded-lg shadow-lg">
           <input
             type="text"
-            className="w-full border border-gray-300 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-gray-600 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
             placeholder="Enter your todo"
           />
           <button
@@ -99,13 +94,13 @@ console.log("data", data);
             Add Todo
           </button>
           <div className="mt-6">
-            {!todos?.length && <div className="flex justify-center items-center font-bold text-gray-500">No Todos</div>}
+            {!todos?.length && <div className="flex justify-center items-center font-bold text-gray-400">No Todos</div>}
             {todos?.map((value) => (
               <div
                 key={value.id}
-                className="flex justify-between items-center p-3 border border-gray-300 rounded mt-2 bg-white shadow-sm"
+                className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
-                <div>{value.todoContent}</div>
+                <div className="text-white">{value.todoContent}</div>
                 <div className="flex space-x-2">
                   <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
                     Edit
