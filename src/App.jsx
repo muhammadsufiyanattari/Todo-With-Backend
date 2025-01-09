@@ -75,8 +75,8 @@ console.log("data", data);
   return (
     <>
       <div className="bg-gray-900 w-full p-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="text-white font-bold text-2xl">Todo App</div>
+        <div className="container mx-auto flex justify-center items-center">
+          <div className="text-white font-bold text-2xl">Todo App With Persnal Back-End</div>
         </div>
       </div>
       <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-800 py-10">
