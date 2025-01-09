@@ -3,7 +3,7 @@ import "./App.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 const App = () => {
-  const base_url = "http://localhost:3000";
+  const base_url = "https://todos-backend-5kwp.vercel.app";
   const [todos, setTodos] = useState([]);
   // const [inptodo, setInptodo] = useState(null);
   const getTodo = async () => {
