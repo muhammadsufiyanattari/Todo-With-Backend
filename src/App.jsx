@@ -44,6 +44,7 @@ const App = () => {
 
 
   //post request
+  
   const addTodo = async (event) => {
     try {
       event.preventDefault();
@@ -73,43 +74,48 @@ console.log("data", data);
   }
   return (
     <>
-      <div className="App flex flex-col items-center justify-center h-screen bg-gray-100">
-        <h1 className="font-extrabold text-3xl py-1">Todo App</h1>
-        <form onSubmit={addTodo} className="w-1/2 overflow-auto">
+      <nav className="bg-gradient-to-r from-blue-500 to-purple-600 w-full p-4 shadow-lg">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-white font-bold text-2xl">Todo App</div>
+          <div className="flex space-x-4">
+            <a href="#" className="text-white hover:text-gray-300">Home</a>
+            <a href="#" className="text-white hover:text-gray-300">About</a>
+            <a href="#" className="text-white hover:text-gray-300">Contact</a>
+          </div>
+        </div>
+      </nav>
+      <div className="App flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-gray-100 to-gray-300 py-10">
+        <h1 className="font-extrabold text-5xl py-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">Todo App</h1>
+        <form onSubmit={addTodo} className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
           <input
-          // required
             type="text"
-            className="w-full border border-gray-300 p-2 rounded"
+            className="w-full border border-gray-300 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your todo"
           />
           <button
             type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded mt-2"
+            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded hover:from-blue-600 hover:to-purple-700 transition duration-200"
           >
             Add Todo
           </button>
-          <div className="bg-amber-7  text-black">
-            {!todos?.length && <div className="flex justify-center items-center font-bold">No Todos</div>}
-            {todos?.map((value, index) => {
-              return (
-                <div
-                  key={value.id}
-                  className="flex justify-between items-center p-2 border border-gray-300 mt-2"
-                >
-                  <div>{value.todoContent}</div>
-                  {/* {console.log(value.todoContent)} */}
-
-                  <div>
-                    <button className="bg-green-500 text-white p-2 rounded">
-                      Edit
-                    </button>
-                    <button onClick={()=>deleteTodo(value.id)} className="bg-red-500 text-white p-2 rounded">
-                      
-                      Delete 
-                    </button>
-                  </div>
+          <div className="mt-6">
+            {!todos?.length && <div className="flex justify-center items-center font-bold text-gray-500">No Todos</div>}
+            {todos?.map((value) => (
+              <div
+                key={value.id}
+                className="flex justify-between items-center p-3 border border-gray-300 rounded mt-2 bg-white shadow-sm"
+              >
+                <div>{value.todoContent}</div>
+                <div className="flex space-x-2">
+                  <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
+                    Edit
+                  </button>
+                  <button onClick={() => deleteTodo(value.id)} className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200">
+                    Delete
+                  </button>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </form>
       </div>
