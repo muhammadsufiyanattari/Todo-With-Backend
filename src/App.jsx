@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
+import toast from "react-hot-toast";
 const App = () => {
   const base_url = "http://localhost:3000";
   const [todos, setTodos] = useState([]);
@@ -63,7 +64,8 @@ const App = () => {
     // console.log("todoId", todoId);
    try {
     const {data}= axios.delete(`${base_url}/deletTodo/${todoId}`)
-// console.log("data", data);
+console.log("data", data);
+    toast.success(data.message);
     getTodo();
    } catch (error) {
     console.log(error);
@@ -75,7 +77,7 @@ const App = () => {
         <h1 className="font-extrabold text-3xl py-1">Todo App</h1>
         <form onSubmit={addTodo} className="w-1/2 overflow-auto">
           <input
-          required
+          // required
             type="text"
             className="w-full border border-gray-300 p-2 rounded"
           />
