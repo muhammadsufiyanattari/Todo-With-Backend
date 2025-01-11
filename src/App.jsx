@@ -118,9 +118,15 @@ const App = () => {
                 key={value.id}
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
-                <div className="text-white">{value.todoContent}</div>
+                <div className="text-white">
+                  <input className="bg-gray-800 p-2 rounded-md" type="text"defaultValue={value.todoContent} name="" id="" />
+                  {/* {value.todoContent} */}
+                  </div>
+                
                 <div className="flex space-x-2">
-                  <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
+                  
+                  <button
+                   className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
                     Edit
                   </button>
                   <button
