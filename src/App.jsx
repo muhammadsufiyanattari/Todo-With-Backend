@@ -5,7 +5,9 @@ import toast from "react-hot-toast";
 const App = () => {
   const base_url = "https://todos-backend-5kwp.vercel.app";
   const [todos, setTodos] = useState([]);
+  const [eidttodos, setEditTodos] = useState(false);
   // const [inptodo, setInptodo] = useState(null);
+
   const getTodo = async () => {
     try {
       const res = await axios(`${base_url}/getTodos`);
@@ -20,8 +22,8 @@ const App = () => {
       //  console.log("todo", todo.todoContent , todo.id)
 
       // ));
-      // console.log("todoData", todoData);
-      setTodos(todoData);//data ko set karne k liye use hota hai
+      console.log("todoData", todoData);
+      setTodos(todoData); //data ko set karne k liye use hota hai
     } catch (error) {
       console.log(error);
     }
@@ -49,14 +51,15 @@ const App = () => {
       event.preventDefault();
 
       let inpValue = event.target[0].value;
-      const res = await axios.post(`${base_url}/addTodo`, {
-        todo: inpValue,
-      });
-      if(inpValue === ""){
+
+      if (inpValue.trim() === "") {
         toast.dismiss();
         // toast.error("Please Enter Todo !");
         return;
       }
+      const res = await axios.post(`${base_url}/addTodo`, {
+        todo: inpValue,
+      });
       // console.log(res);
       getTodo(); //page refresh karne par value mil rhi thi is lye hume function ko call krna para
       event.target.reset(); //ye form ko clear krne k liye use hota hai
@@ -64,6 +67,18 @@ const App = () => {
       console.log(error);
     }
   };
+  // Edit todo
+  let editTodo = async (todoId) => {
+    try {
+      const { data } = await axios.patch(`${base_url}/editTodo/${todoId}`);
+      console.log("datas", data.message);
+      toast.dismiss();
+      toast.success(data.message);
+      setEditTodos(true);
+      getTodo();
+    } catch (error) {}
+  };
+
   // delete requset
   const deleteTodo = async (todoId) => {
     // console.log("todoId", todoId);
@@ -76,7 +91,7 @@ const App = () => {
     } catch (error) {
       // console.log(error.response.data);
       toast.dismiss(); //toast message ko dismiss karne k liye use hota hai
-      toast.error(error.response.data);//error message ko show karne k liye use hota hai
+      toast.error(error.response.data); //error message ko show karne k liye use hota hai
     }
   };
   return (
@@ -119,18 +134,27 @@ const App = () => {
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
                 <div className="text-white">
-                  <input className="bg-gray-800 p-2 rounded-md" type="text"defaultValue={value.todoContent} name="" id="" />
+                  <input
+                    className="bg-gray-800 p-2 rounded-md"
+                    type="text"
+                    defaultValue={value.todoContent}
+                    name=""
+                    id=""
+                  />
                   {/* {value.todoContent} */}
-                  </div>
-                
+                </div>
+
                 <div className="flex space-x-2">
-                  
                   <button
-                   className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
+                    onClick={() => {
+                      console.log("Edit ho gaya");
+                    }}
+                    className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
+                  >
                     Edit
                   </button>
                   <button
-                    onClick={() => deleteTodo(value.id)}
+                    onClick={() => deleteTodo(value?.id)}
                     className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                   >
                     Delete
