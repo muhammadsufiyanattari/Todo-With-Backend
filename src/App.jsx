@@ -130,7 +130,7 @@ const App = () => {
             )}
             {todos?.map((value) => (
               <div
-                key={value.id}
+                key={value?.id}
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
                 <div className="text-white">
@@ -146,9 +146,7 @@ const App = () => {
 
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => {
-                      console.log("Edit ho gaya");
-                    }}
+                    onClick={() => editTodo(value?.id)}
                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                   >
                     Edit
