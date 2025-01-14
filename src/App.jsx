@@ -137,43 +137,38 @@ const App = () => {
                 key={value?.id}
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
-                <div className="text-white">
+
+              {!value.isEditing? ( <div className="flex justify-between items-center w-full">
+                <div className="text-white ">
                   {
-                  // console.log(value?.isEditing)
+                    // console.log(value?.isEditing)
                   }
-                  {!value?.isEditing ? (
+
+                
                     <span className="bg-gray-800 p-2 rounded-md ">
                       {value.todoContent}
                     </span>
-                  ) : (
-                    <input
-                      className="bg-gray-400  p-2 rounded-md "
-                      type="text"
-                      defaultValue={value.todoContent}
-                      name=""
-                      id=""
-                    />
-                  )}
+               
+                  
                   {/* {value.todoContent} */}
                 </div>
 
                 <div className="flex space-x-2">
                   <button
                     onClick={() => {
-                      const newTodo=todos.map((todos,i)=>{
-                        if (i===index) {
+                      const newTodo = todos.map((todos, i) => {
+                        if (i === index) {
                           todos.isEditing = true;
-                        }
-                        else{
+                        } else {
                           todos.isEditing = false;
                         }
-                        return todos
-                      })
+                        return todos;
+                      });
 
                       console.log("edit ho gaya");
 
                       // todos[index].isEditing = true;
-                       setTodos([...newTodo]); //sprit opareter new arr me valve set kar de ga
+                      setTodos([...newTodo]); //sprit opareter new arr me valve set kar de ga
                     }}
                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                   >
@@ -186,6 +181,23 @@ const App = () => {
                     Delete
                   </button>
                 </div>
+
+                {/* isEditing true ui me show karna hai */}
+                </div>)
+                :
+                (<form className="text-white flex justify-between items-center w-full">
+                  <input
+                    className="bg-gray-400  p-2 rounded-md "
+                    type="text"
+                    defaultValue={value.todoContent}
+                    name=""
+                    id=""
+                  />
+                  <div className="flex space-x-2">
+                    <button>Cancel</button>
+                    <button>Save</button>
+                  </div>
+                </form>)}
               </div>
             ))}
           </div>
