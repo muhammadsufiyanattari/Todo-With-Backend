@@ -75,10 +75,8 @@ const App = () => {
   let editTodo = async (todoId) => {
     try {
       const { data } = await axios.patch(`${base_url}/editTodo/${todoId}`);
-      console.log("datas", data.message);
-      toast.dismiss();
-      toast.success(data.message);
-      setEditTodos(true);
+     
+      // setEditTodos(true);
       getTodo();
     } catch (error) {}
   };
@@ -137,67 +135,85 @@ const App = () => {
                 key={value?.id}
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
+                {!value.isEditing ? (
+                  <div className="flex justify-between items-center w-full">
+                    <div className="text-white ">
+                      {
+                        // console.log(value?.isEditing)
+                      }
 
-              {!value.isEditing? ( <div className="flex justify-between items-center w-full">
-                <div className="text-white ">
-                  {
-                    // console.log(value?.isEditing)
-                  }
+                      <span className="bg-gray-800 p-2 rounded-md ">
+                        {value.todoContent}
+                      </span>
 
-                
-                    <span className="bg-gray-800 p-2 rounded-md ">
-                      {value.todoContent}
-                    </span>
-               
-                  
-                  {/* {value.todoContent} */}
-                </div>
+                      {/* {value.todoContent} */}
+                    </div>
 
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => {
-                      const newTodo = todos.map((todos, i) => {
-                        if (i === index) {
-                          todos.isEditing = true;
-                        } else {
-                          todos.isEditing = false;
-                        }
-                        return todos;
-                      });
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => {
+                          const newTodo = todos.map((todos, i) => {
+                            if (i === index) {
+                              todos.isEditing = true;
+                            } else {
+                              todos.isEditing = false;
+                            }
+                            return todos;
+                          });
 
-                      console.log("edit ho gaya");
+                          console.log("edit ho gaya");
 
-                      // todos[index].isEditing = true;
-                      setTodos([...newTodo]); //sprit opareter new arr me valve set kar de ga
-                    }}
-                    className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => deleteTodo(value?.id)}
-                    className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
-                  >
-                    Delete
-                  </button>
-                </div>
+                          // todos[index].isEditing = true;
+                          setTodos([...newTodo]); //sprit opareter new arr me valve set kar de ga
+                        }}
+                        className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => deleteTodo(value?.id)}
+                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
+                      >
+                        Delete
+                      </button>
+                    </div>
 
-                {/* isEditing true ui me show karna hai */}
-                </div>)
-                :
-                (<form className="text-white flex justify-between items-center w-full">
-                  <input
-                    className="bg-gray-400  p-2 rounded-md "
-                    type="text"
-                    defaultValue={value.todoContent}
-                    name=""
-                    id=""
-                  />
-                  <div className="flex space-x-2">
-                    <button>Cancel</button>
-                    <button>Save</button>
+                    {/* isEditing true ui me show karna hai */}
                   </div>
-                </form>)}
+                ) : (
+                  <form className="text-white flex justify-between items-center w-full">
+                    <input
+                      className="bg-gray-600 focus:outline-gray-900 outline-none   p-2 rounded-md "
+                      type="text"
+                      defaultValue={value.todoContent}
+                      name=""
+                      id=""
+                    />
+                    <div className="flex space-x-2">
+                      <button 
+                      onClick={()=>{
+                        const newTodo = todos.map((todos, i) => {
+                          if (i === index) {
+                            todos.isEditing = false;
+                          }
+                          // } else {
+                          //   todos.isEditing = true;
+                          // }
+                          return todos;
+                        });
+                        setTodos([...newTodo]);
+                      }}
+                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200">
+                        Cancel
+                      </button>
+                      <button
+                      onClick={() => editTodo(value?.id)}
+                      className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
+                        Save
+                      </button>
+                    </div>
+                  </form>
+                )}
               </div>
             ))}
           </div>
