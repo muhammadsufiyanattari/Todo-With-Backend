@@ -3,9 +3,10 @@ import "./App.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 const App = () => {
-  const base_url = "https://todos-backend-5kwp.vercel.app";
+  // const base_url = "https://todos-backend-5kwp.vercel.app";
+  const base_url = "http://localhost:3000";
   const [todos, setTodos] = useState([]);
-  const [eidttodos, setEditTodos] = useState(false);
+  // const [isEdit, setIsEdit] = useState(false);
   // const [inptodo, setInptodo] = useState(null);
 
   const getTodo = async () => {
@@ -22,6 +23,9 @@ const App = () => {
       //  console.log("todo", todo.todoContent , todo.id)
 
       // ));
+      const myState = todoData.map((todos) => {
+        // return { ...todos, isEditing: false };
+      });
       console.log("todoData", todoData);
       setTodos(todoData); //data ko set karne k liye use hota hai
     } catch (error) {
@@ -128,25 +132,49 @@ const App = () => {
                 No Todos
               </div>
             )}
-            {todos?.map((value) => (
+            {todos?.map((value, index) => (
               <div
                 key={value?.id}
                 className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
               >
                 <div className="text-white">
-                  <input
-                    className="bg-gray-800 p-2 rounded-md"
-                    type="text"
-                    defaultValue={value.todoContent}
-                    name=""
-                    id=""
-                  />
+                  {
+                  // console.log(value?.isEditing)
+                  }
+                  {!value?.isEditing ? (
+                    <span className="bg-gray-800 p-2 rounded-md ">
+                      {value.todoContent}
+                    </span>
+                  ) : (
+                    <input
+                      className="bg-gray-400  p-2 rounded-md "
+                      type="text"
+                      defaultValue={value.todoContent}
+                      name=""
+                      id=""
+                    />
+                  )}
                   {/* {value.todoContent} */}
                 </div>
 
                 <div className="flex space-x-2">
                   <button
-                    onClick={() => editTodo(value?.id)}
+                    onClick={() => {
+                      const newTodo=todos.map((todos,i)=>{
+                        if (i===index) {
+                          todos.isEditing = true;
+                        }
+                        else{
+                          todos.isEditing = false;
+                        }
+                        return todos
+                      })
+
+                      console.log("edit ho gaya");
+
+                      // todos[index].isEditing = true;
+                       setTodos([...newTodo]); //sprit opareter new arr me valve set kar de ga
+                    }}
                     className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
                   >
                     Edit
