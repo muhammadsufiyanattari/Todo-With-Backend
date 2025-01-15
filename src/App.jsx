@@ -72,9 +72,13 @@ const App = () => {
     }
   };
   // Edit todo
-  let editTodo = async (todoId) => {
+  let editTodo = async (todoId,e) => {
     try {
       const { data } = await axios.patch(`${base_url}/editTodo/${todoId}`);
+
+     e.preventDefault();
+     e.target
+     console.log(e.target);
      
       // setEditTodos(true);
       getTodo();
@@ -181,7 +185,9 @@ const App = () => {
                     {/* isEditing true ui me show karna hai */}
                   </div>
                 ) : (
-                  <form className="text-white flex justify-between items-center w-full">
+                  <form
+                  onClick={()=>editTodo(value?.id,e)}
+                   className="text-white flex justify-between items-center w-full">
                     <input
                       className="bg-gray-600 focus:outline-gray-900 outline-none   p-2 rounded-md "
                       type="text"
@@ -207,7 +213,8 @@ const App = () => {
                         Cancel
                       </button>
                       <button
-                      onClick={() => editTodo(value?.id)}
+                      // onClick={() => editTodo(value?.id)}
+                      type="submit"
                       className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
                         Save
                       </button>
