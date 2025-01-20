@@ -6,7 +6,7 @@ const App = () => {
   // const base_url = "https://todos-backend-5kwp.vercel.app";
   const base_url = "http://localhost:3000";
   const [todos, setTodos] = useState([]);
-  // const [isEdit, setIsEdit] = useState(false);
+  const [isEditText, setIsEditText] = useState(false);
   // const [inptodo, setInptodo] = useState(null);
 
   const getTodo = async () => {
@@ -72,17 +72,25 @@ const App = () => {
     }
   };
   // Edit todo
-  let editTodo = async (todoId,e) => {
+  let editTodo = async (todoId, event) => { 
+    event.preventDefault();
     try {
-      const { data } = await axios.patch(`${base_url}/editTodo/${todoId}`);
 
-     e.preventDefault();
-     e.target
-     console.log(e.target);
-     
+      const inpvalue = event.target[0].value;
+      await axios.patch(`${base_url}/editTodo/${todoId}`, {
+        todoContent: inpvalue,
+      });
+
+      console.log("inpvalueced", isEditText);
+      console.log("editTodo");
+      
+
       // setEditTodos(true);
       getTodo();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error||"unknown error");
+      
+    }
   };
 
   // delete requset
@@ -112,10 +120,10 @@ const App = () => {
       <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-800 py-10">
         <h1 className="font-extrabold text-5xl py-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
           Todo App
-        </h1>
+        </h1><div           className="w-full max-w-md bg-gray-700 p-8 rounded-lg shadow-lg">
         <form
           onSubmit={addTodo}
-          className="w-full max-w-md bg-gray-700 p-8 rounded-lg shadow-lg"
+
         >
           <input
             type="text"
@@ -128,16 +136,18 @@ const App = () => {
           >
             Add Todo
           </button>
-          <div className="mt-6">
+         
+        </form>
+        <div className="mt-6 h-[30vh] w-[400px] scrollbar overflow-auto">
             {!todos?.length && (
-              <div className="flex justify-center items-center font-bold text-gray-400">
+              <div className="flex justify-center items-center bg-gray-600 p-3  font-bold text-gray-400">
                 No Todos
               </div>
             )}
             {todos?.map((value, index) => (
               <div
                 key={value?.id}
-                className="flex justify-between items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700 shadow-sm"
+                className="flex justify-between  items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700  shadow-sm"
               >
                 {!value.isEditing ? (
                   <div className="flex justify-between items-center w-full">
@@ -186,11 +196,16 @@ const App = () => {
                   </div>
                 ) : (
                   <form
-                  onClick={()=>editTodo(value?.id,e)}
-                   className="text-white flex justify-between items-center w-full">
+                    onSubmit={(event) => editTodo(value.id, event)}
+                    className="text-white flex justify-between items-center w-full"
+                  >
                     <input
                       className="bg-gray-600 focus:outline-gray-900 outline-none   p-2 rounded-md "
                       type="text"
+                      onChange={(e) => {
+                         setIsEditText( e.target.value)
+                        console.log(e.target.value);
+                      }}
                       defaultValue={value.todoContent}
                       name=""
                       id=""
@@ -209,13 +224,16 @@ const App = () => {
                         });
                         setTodos([...newTodo]);
                       }}
-                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200">
+                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
+                      type="button"
+                      
+                      >
                         Cancel
                       </button>
                       <button
                       // onClick={() => editTodo(value?.id)}
-                      type="submit"
-                      className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200">
+                      // type="submit"
+                      className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200" type="submit">
                         Save
                       </button>
                     </div>
@@ -224,7 +242,7 @@ const App = () => {
               </div>
             ))}
           </div>
-        </form>
+          </div>
       </div>
     </>
   );
