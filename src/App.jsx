@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const getUrl = () => {
   const isProduction = window.location.href.includes("https");
   const baseUrl = isProduction
-    ? "https://todos-backend-5kwp.vercel.app"
+    ? "https://todos-backend-6128.vercel.app"
     : "http://localhost:3000";
     return baseUrl
 };
