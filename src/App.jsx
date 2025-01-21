@@ -2,16 +2,22 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
 import toast from "react-hot-toast";
+const getUrl = () => {
+  const isProduction = window.location.href.includes("https");
+  const baseUrl = isProduction
+    ? "https://todos-backend-5kwp.vercel.app"
+    : "http://localhost:3000";
+    return baseUrl
+};
 const App = () => {
-  // const base_url = "https://todos-backend-5kwp.vercel.app";
-  const base_url = "http://localhost:3000";
+ 
   const [todos, setTodos] = useState([]);
   const [isEditText, setIsEditText] = useState(false);
   // const [inptodo, setInptodo] = useState(null);
 
   const getTodo = async () => {
     try {
-      const res = await axios(`${base_url}/getTodos`);
+      const res = await axios(`${getUrl()}/getTodos`);
       // let todoData = res?.data?.data.map((todo) => ({
       //   ...todo,
       //   todoContent: todo.todoContent || "No Content",
@@ -61,8 +67,8 @@ const App = () => {
         // toast.error("Please Enter Todo !");
         return;
       }
-      const res = await axios.post(`${base_url}/addTodo`, {
-        todo: inpValue,
+      const res = await axios.post(`${getUrl()}/addTodo`, {
+        todoContent: inpValue,
       });
       // console.log(res);
       getTodo(); //page refresh karne par value mil rhi thi is lye hume function ko call krna para
@@ -72,24 +78,21 @@ const App = () => {
     }
   };
   // Edit todo
-  let editTodo = async (todoId, event) => { 
+  let editTodo = async (todoId, event) => {
     event.preventDefault();
     try {
-
       const inpvalue = event.target[0].value;
-      await axios.patch(`${base_url}/editTodo/${todoId}`, {
+      await axios.patch(`${getUrl()}/editTodo/${todoId}`, {
         todoContent: inpvalue,
       });
 
       console.log("inpvalueced", isEditText);
       console.log("editTodo");
-      
 
       // setEditTodos(true);
       getTodo();
     } catch (error) {
-      console.log(error||"unknown error");
-      
+      console.log(error || "unknown error");
     }
   };
 
@@ -97,7 +100,7 @@ const App = () => {
   const deleteTodo = async (todoId) => {
     // console.log("todoId", todoId);
     try {
-      const { data } = await axios.delete(`${base_url}/deletTodo/${todoId}`);
+      const { data } = await axios.delete(`${getUrl()}/deletTodo/${todoId}`);
       console.log("datas", data.message);
       toast.dismiss();
       toast.success(data.message);
@@ -120,25 +123,22 @@ const App = () => {
       <div className="App flex flex-col items-center justify-center min-h-screen bg-gray-800 py-10">
         <h1 className="font-extrabold text-5xl py-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
           Todo App
-        </h1><div           className="w-full max-w-md bg-gray-700 p-8 rounded-lg shadow-lg">
-        <form
-          onSubmit={addTodo}
-
-        >
-          <input
-            type="text"
-            className="w-full border border-gray-600 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
-            placeholder="Enter your todo"
-          />
-          <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded hover:from-blue-600 hover:to-purple-700 transition duration-200"
-          >
-            Add Todo
-          </button>
-         
-        </form>
-        <div className="mt-6 h-[30vh] w-[400px] scrollbar overflow-auto">
+        </h1>
+        <div className="w-full max-w-md bg-gray-700 p-8 rounded-lg shadow-lg">
+          <form onSubmit={addTodo}>
+            <input
+              type="text"
+              className="w-full border border-gray-600 p-3 rounded mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-800 text-white"
+              placeholder="Enter your todo"
+            />
+            <button
+              type="submit"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 rounded hover:from-blue-600 hover:to-purple-700 transition duration-200"
+            >
+              Add Todo
+            </button>
+          </form>
+          <div className="mt-6 h-[30vh] w-[400px] scrollbar overflow-auto">
             {!todos?.length && (
               <div className="flex justify-center items-center bg-gray-600 p-3  font-bold text-gray-400">
                 No Todos
@@ -146,7 +146,7 @@ const App = () => {
             )}
             {todos?.map((value, index) => (
               <div
-                key={value?.id}
+                key={value?._id}
                 className="flex justify-between  items-center p-3 border border-gray-600 rounded mt-2 bg-gray-700  shadow-sm"
               >
                 {!value.isEditing ? (
@@ -185,7 +185,7 @@ const App = () => {
                         Edit
                       </button>
                       <button
-                        onClick={() => deleteTodo(value?.id)}
+                        onClick={() => deleteTodo(value?._id)}
                         className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
                       >
                         Delete
@@ -196,14 +196,14 @@ const App = () => {
                   </div>
                 ) : (
                   <form
-                    onSubmit={(event) => editTodo(value.id, event)}
+                    onSubmit={(event) => editTodo(value._id, event)}
                     className="text-white flex justify-between items-center w-full"
                   >
                     <input
                       className="bg-gray-600 focus:outline-gray-900 outline-none   p-2 rounded-md "
                       type="text"
                       onChange={(e) => {
-                         setIsEditText( e.target.value)
+                        setIsEditText(e.target.value);
                         console.log(e.target.value);
                       }}
                       defaultValue={value.todoContent}
@@ -211,29 +211,30 @@ const App = () => {
                       id=""
                     />
                     <div className="flex space-x-2">
-                      <button 
-                      onClick={()=>{
-                        const newTodo = todos.map((todos, i) => {
-                          if (i === index) {
-                            todos.isEditing = false;
-                          }
-                          // } else {
-                          //   todos.isEditing = true;
-                          // }
-                          return todos;
-                        });
-                        setTodos([...newTodo]);
-                      }}
-                      className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
-                      type="button"
-                      
+                      <button
+                        onClick={() => {
+                          const newTodo = todos.map((todos, i) => {
+                            if (i === index) {
+                              todos.isEditing = false;
+                            }
+                            // } else {
+                            //   todos.isEditing = true;
+                            // }
+                            return todos;
+                          });
+                          setTodos([...newTodo]);
+                        }}
+                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition duration-200"
+                        type="button"
                       >
                         Cancel
                       </button>
                       <button
-                      // onClick={() => editTodo(value?.id)}
-                      // type="submit"
-                      className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200" type="submit">
+                        // onClick={() => editTodo(value?.id)}
+                        // type="submit"
+                        className="bg-green-500 text-white p-2 rounded hover:bg-green-600 transition duration-200"
+                        type="submit"
+                      >
                         Save
                       </button>
                     </div>
@@ -242,7 +243,7 @@ const App = () => {
               </div>
             ))}
           </div>
-          </div>
+        </div>
       </div>
     </>
   );
